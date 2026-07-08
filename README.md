@@ -1,6 +1,6 @@
 # OpenRouter LLM CLI Client
 
-A lightweight, secure command-line interface (CLI) client to chat with a large language model (LLM), engineered in Python utilizing the native OpenRouter SDK. 
+A lightweight, secure command-line interface (CLI) client to chat with a large language model (LLM), engineered in Python utilizing the native OpenRouter software development kit (SDK). 
 
 ## Features
 
@@ -9,7 +9,7 @@ A lightweight, secure command-line interface (CLI) client to chat with a large l
 * **Flags Handling**: Handle provider safety flags or inference error by normalizing output to user or state rollback.
 
 ### Dependency
-Install the required upstream software development kit:
+Install the required upstream SDK:
 ```bash
 pip install openrouter
 ```
