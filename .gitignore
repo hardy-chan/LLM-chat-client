@@ -11,3 +11,6 @@ __pycache__/
 
 # Local IDE configuration
 .vscode/
+
+# Development & Temporary Files
+script.sql

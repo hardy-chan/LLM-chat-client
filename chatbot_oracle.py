@@ -69,7 +69,6 @@ def fetch_conversation_context(cursor, session_id: int, limit: int = DB_LIMIT):
     )
     rows = cursor.fetchall()
     
-    # Corrected tuple unpacking logic to read string roles and CLOB contents properly
     return [
         {"role": role, "content": content.read() if hasattr(content, 'read') else content} 
         for role, content in reversed(rows)
@@ -88,7 +87,7 @@ try:
     session_id = create_chat_session(cursor, session_title)
     connection.commit()
     print(f"Secure session registered in Oracle DB under ID: [ {session_id} ]")
-    print("Chat with the assistant. (Type 'exit' to quit)")
+    print("Chat with the AI assistant. (Type 'exit' to quit)")
 
     while True:
         user_input = input("\nYou: ")
