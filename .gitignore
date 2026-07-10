@@ -14,3 +14,4 @@ __pycache__/
 
 # Development & Temporary Files
 script.sql
+*.png

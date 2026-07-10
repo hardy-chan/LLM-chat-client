@@ -83,11 +83,60 @@ try:
     cursor = connection.cursor()
 
     print("\n=== System Initialized ===")
-    session_title = input("Enter a topic name for this database chat thread: ")
-    session_id = create_chat_session(cursor, session_title)
-    connection.commit()
-    print(f"Secure session registered in Oracle DB under ID: [ {session_id} ]")
+    print("1. Start a BRAND NEW chat session")
+    print("2. RESUME a previous chat session")
+    choice = input("Choose an option (1 or 2): ").strip()
+
+    if choice == "2":
+        # Query Oracle for the most recent active sessions
+        cursor.execute(
+            """SELECT session_id, session_name 
+               FROM SYSTEM.chat_sessions 
+               ORDER BY created_at DESC"""
+        )
+        sessions = cursor.fetchmany(5) # Fetch the top 5 recent chats
+        
+        if not sessions:
+            print("\nNo previous sessions found in DB. Starting a new one.")
+            session_title = input("Enter a topic name for this database chat thread: ")
+            session_id = create_chat_session(cursor, session_title)
+            connection.commit()
+        else:
+            print("\nRecent Sessions in Database:")
+            # Extract a valid list of IDs that actually exist in the fetched sessions
+            valid_ids = []
+            for sid, sname in sessions:
+                print(f"  [ ID: {sid} ] - Topic: {sname}")
+                valid_ids.append(sid)
+            
+            # Loop until a numeric, valid session ID is selected
+            while True:
+                selected_id = input("\nEnter the Session ID you want to load: ").strip()
+                
+                if not selected_id.isdigit():
+                    print("Error: Please enter a valid number.")
+                    continue
+                
+                session_id = int(selected_id)
+                
+                if session_id not in valid_ids:
+                    print(f"Error: ID [ {session_id} ] is not in the list. Please choose an active session ID.")
+                    continue
+                
+                # If both checks pass, break the validation loop
+                break
+                
+            print(f"Loaded historic context for Session ID: [ {session_id} ]")
+
+    else:
+        # Default option 1: Create a brand new session row
+        session_title = input("\nEnter a topic name for this database chat thread: ")
+        session_id = create_chat_session(cursor, session_title)
+        connection.commit()
+        print(f"Secure session registered in Oracle DB under ID: [ {session_id} ]")
+
     print("Chat with the AI assistant. (Type 'exit' to quit)")
+
 
     while True:
         user_input = input("\nYou: ")
