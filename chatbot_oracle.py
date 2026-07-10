@@ -64,7 +64,7 @@ def fetch_conversation_context(cursor, session_id: int, limit: int = DB_LIMIT):
                SELECT role, content FROM SYSTEM.chat_history 
                WHERE session_id = :1 
                ORDER BY created_at DESC
-           ) WHERE ROWNUM <= :4""",
+           ) WHERE ROWNUM <= :2""",
         (int(session_id), int(limit))
     )
     rows = cursor.fetchall()
